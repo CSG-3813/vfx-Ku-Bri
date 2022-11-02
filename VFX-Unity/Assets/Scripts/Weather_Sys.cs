@@ -9,6 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 
 public class Weather_Sys : MonoBehaviour
@@ -28,7 +30,11 @@ public class Weather_Sys : MonoBehaviour
     bool isRaining;
     public bool IsRaining { get { return isRaining; } }
 
+    public Volume rainProcess;
 
+    float lerpValue;
+    float lerpDurration = 10;
+    float transitionTime;
 
 
 
@@ -47,6 +53,7 @@ public class Weather_Sys : MonoBehaviour
             if(timerTime > 0)
             {
                 timerTime -= Time.deltaTime;
+                TintSky();
             }
             else
             {
@@ -81,5 +88,16 @@ public class Weather_Sys : MonoBehaviour
         rainPS.Stop();
         audioSrc.Stop();
         sunny.TransitionTo(2.0f);
+    }
+
+
+    void TintSky()
+    {
+        if (transitionTime > lerpDurration)
+        {
+            lerpValue = Mathf.Lerp(0, 1, transitionTime / lerpDurration);
+            transitionTime += Time.deltaTime;
+            rainProcess.weight = lerpValue;
+        }
     }
 }
