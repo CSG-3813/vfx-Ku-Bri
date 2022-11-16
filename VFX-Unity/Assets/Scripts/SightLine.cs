@@ -21,7 +21,37 @@ public class SightLine : MonoBehaviour
     {
         ThisCollider = GetComponent<SphereCollider>();
         LastKnownSighting = transform.position;
+    }
 
+
+    private bool TargetInFOV(Transform target)
+    {
+        Vector3 DirToTarget = target.position - EyePoint.position;
+        float angle = Vector3.Angle(EyePoint.forward, DirToTarget);
+
+        if(angle <= FieldofView)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private bool HasClearLineOfSIghtToTarget(Transform target)
+    {
+        RaycastHit info;
+
+        Vector3 DirToTarget = (target.position - EyePoint.position).normalized;
+
+        if(Physics.Raycast(EyePoint.position, DirToTarget, out info, ThisCollider.radius)
+        {
+            if (info.transform.CompareTag(TargetTag))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
    /*** 
